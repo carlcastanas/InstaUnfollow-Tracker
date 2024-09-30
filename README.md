@@ -52,7 +52,7 @@ You will need [Visual Studio Code (VSCode)](https://code.visualstudio.com/) to r
 ## Step 5: Add InstaUnfollow-Tracker Code
 
 1. Download the InstaUnfollow-Tracker code from [this GitHub repository](#).
-2. Copy the code into `instagram.html`, or if you downloaded the repo, just add the file in the **/connections/followers_and_following/instagram.html** folder.
+2. Copy the code into `instagram.html`, or if you downloaded the repo, just add the file in the `/connections/followers_and_following/instagram.html` folder.
 
 ---
 
