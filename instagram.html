@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Unfollowers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4; /* Light background color */
+            color: #333; /* Dark text color */
+        }
+        h1 {
+            color: #e1306c; /* Instagram color */
+            text-align: center;
+        }
+        button {
+            background-color: #e1306c; /* Instagram color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #c32aa3; /* Darker shade on hover */
+        }
+        #result {
+            margin-top: 20px;
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #e1306c; /* Instagram color */
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 5px 0;
+        }
+        a {
+            text-decoration: none;
+            color: #0077cc; /* Link color */
+        }
+        a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Instagram Unfollowers</h1>
+    <button onclick="showUnfollowers()">Show Unfollowers</button>
+    <div id="result"></div>
+
+    <script>
+        async function loadFollowers(file) {
+            const response = await fetch(file);
+            const text = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(text, 'text/html');
+            const followers = Array.from(doc.querySelectorAll('div._a6-p div > div > a')).map(a => a.textContent.trim());
+            return followers;
+        }
+
+        async function loadFollowing(file) {
+            const response = await fetch(file);
+            const text = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(text, 'text/html');
+            const following = Array.from(doc.querySelectorAll('div._a6-p div > div > a')).map(a => a.textContent.trim());
+            return following;
+        }
+
+        async function showUnfollowers() {
+            const followers1 = await loadFollowers('followers_1.html');
+            const followers2 = await loadFollowers('followers_2.html');
+            const following = await loadFollowing('following.html');
+
+            const followersSet = new Set([...followers1, ...followers2]);
+            const unfollowers = following.filter(user => !followersSet.has(user));
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<h2>People You Follow Who Don\'t Follow You Back:</h2>';
+            const ul = document.createElement('ul');
+            unfollowers.forEach(user => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = `https://www.instagram.com/${user}/`;
+                a.target = "_blank"; // Open link in a new tab
+                a.textContent = user;
+                li.appendChild(a);
+                ul.appendChild(li);
+            });
+            resultDiv.appendChild(ul);
+        }
+    </script>
+</body>
+</html>
